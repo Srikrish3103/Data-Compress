@@ -11,42 +11,15 @@ public class HuffmanTree {
 	private PriorityQueue<HuffmanNode> priorityQueue;
 	private HuffmanNode rootNode;
 	
-	public HashMap<Object,String> store(HashMap<Object,Integer> occurenceCount)
+	public HuffmanNode store(HashMap<Object,Integer> occurenceCount)
 	{
-		huffmanNodes=new ArrayList<HuffmanNode>();
 		priorityQueue = new PriorityQueue<HuffmanNode>();
 		for(Map.Entry<Object,Integer> entry:occurenceCount.entrySet())
 		{
 			HuffmanNode node=new HuffmanNode(entry.getKey(),entry.getValue());
-			huffmanNodes.add(node);
 			priorityQueue.add(node);
 		}
-		rootNode=encode();
-		return encodeText(occurenceCount,rootNode);
-	}
-	
-	private HashMap<Object,String> encodeText(HashMap<Object,Integer> occurenceCount,HuffmanNode rootNode)
-	{
-		HashMap<Object,String> encodedText=new HashMap<Object,String>();
-		for(Map.Entry<Object,Integer> entry:occurenceCount.entrySet())
-		{
-			getEncodedText(entry.getKey(),rootNode,"");
-		}
-		return null;
-	}
-	
-	private void getEncodedText(Object object,HuffmanNode rootNode,String text)
-	{
-		if(rootNode!=null)
-		{
-		if(rootNode.left==null && rootNode.right==null && rootNode.getObject().toString().equals(object.toString()))
-		{
-			System.out.println(rootNode.getObject().toString()+""+text);
-			return;
-		}
-		getEncodedText(object,rootNode.left,text+"0");
-		getEncodedText(object,rootNode.right,text+"1");
-		}
+		return encode();
 	}
 	
 	private HuffmanNode encode()
@@ -56,13 +29,28 @@ public class HuffmanTree {
 		{
 			HuffmanNode node1=(HuffmanNode)priorityQueue.poll();
 			HuffmanNode node2=(HuffmanNode)priorityQueue.poll();
-			HuffmanNode node3=new HuffmanNode("~",node1.getFrequency()+node2.getFrequency());
+			HuffmanNode node3=new HuffmanNode('+',node1.getFrequency()+node2.getFrequency());
 			node3.left=node1;
 			node3.right=node2;
 			priorityQueue.add(node3);
 			rootNode=node3;
 		}
 		return rootNode;
+	}
+	
+	public String getEncodedTextForCharacter(HuffmanNode node,char ch,String text)
+	{
+		String encodedText="";
+		if(node!=null)
+		{
+			if(node.left==null && node.right==null && ((Character)node.getObject())==ch)
+			{
+				return text;
+			}
+			encodedText+=getEncodedTextForCharacter(node.left,ch,text+"0");
+			encodedText+=getEncodedTextForCharacter(node.right,ch,text+"1");
+		}
+		return encodedText;
 	}
 	
 }

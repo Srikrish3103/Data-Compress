@@ -19,7 +19,7 @@ public class HuffmanNode implements Comparable<HuffmanNode>{
 		return object;
 	}
 
-	public void setObject(Object object) {
+	public void setObject(int object) {
 		this.object = object;
 	}
 
