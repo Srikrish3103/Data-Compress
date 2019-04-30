@@ -6,63 +6,67 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 public class HuffmanTree {
-	
+
 	private ArrayList<HuffmanNode> huffmanNodes;
 	private PriorityQueue<HuffmanNode> priorityQueue;
 	private HuffmanNode rootNode;
+	int decodeCharPointer=0;
 	
-	public HashMap<Object,String> store(HashMap<Object,Integer> occurenceCount)
-	{
-		huffmanNodes=new ArrayList<HuffmanNode>();
+	public HuffmanNode store(HashMap<Object, Integer> occurenceCount) {
 		priorityQueue = new PriorityQueue<HuffmanNode>();
-		for(Map.Entry<Object,Integer> entry:occurenceCount.entrySet())
-		{
-			HuffmanNode node=new HuffmanNode(entry.getKey(),entry.getValue());
-			huffmanNodes.add(node);
+		for (Map.Entry<Object, Integer> entry : occurenceCount.entrySet()) {
+			HuffmanNode node = new HuffmanNode(entry.getKey(), entry.getValue());
 			priorityQueue.add(node);
 		}
-		rootNode=encode();
-		return encodeText(occurenceCount,rootNode);
+		return encode();
 	}
-	
-	private HashMap<Object,String> encodeText(HashMap<Object,Integer> occurenceCount,HuffmanNode rootNode)
-	{
-		HashMap<Object,String> encodedText=new HashMap<Object,String>();
-		for(Map.Entry<Object,Integer> entry:occurenceCount.entrySet())
-		{
-			getEncodedText(entry.getKey(),rootNode,"");
-		}
-		return null;
-	}
-	
-	private void getEncodedText(Object object,HuffmanNode rootNode,String text)
-	{
-		if(rootNode!=null)
-		{
-		if(rootNode.left==null && rootNode.right==null && rootNode.getObject().toString().equals(object.toString()))
-		{
-			System.out.println(rootNode.getObject().toString()+""+text);
-			return;
-		}
-		getEncodedText(object,rootNode.left,text+"0");
-		getEncodedText(object,rootNode.right,text+"1");
-		}
-	}
-	
-	private HuffmanNode encode()
-	{
-		HuffmanNode rootNode=null;
-		while(priorityQueue.size()>1)
-		{
-			HuffmanNode node1=(HuffmanNode)priorityQueue.poll();
-			HuffmanNode node2=(HuffmanNode)priorityQueue.poll();
-			HuffmanNode node3=new HuffmanNode("~",node1.getFrequency()+node2.getFrequency());
-			node3.left=node1;
-			node3.right=node2;
+
+	private HuffmanNode encode() {
+		HuffmanNode rootNode = null;
+		while (priorityQueue.size() > 1) {
+			HuffmanNode node1 = (HuffmanNode) priorityQueue.poll();
+			HuffmanNode node2 = (HuffmanNode) priorityQueue.poll();
+			HuffmanNode node3 = new HuffmanNode('+', node1.getFrequency() + node2.getFrequency());
+			node3.left = node1;
+			node3.right = node2;
 			priorityQueue.add(node3);
-			rootNode=node3;
+			rootNode = node3;
 		}
 		return rootNode;
 	}
-	
+
+	public String getEncodedTextForCharacter(HuffmanNode node, char ch, String text) {
+		String encodedText = "";
+		if (node != null) {
+			if (node.left == null && node.right == null && ((Character) node.getObject()) == ch) {
+				System.out.println((Character) node.getObject() + " " + text);
+				return text;
+			}
+			encodedText += getEncodedTextForCharacter(node.left, ch, text + "0");
+			encodedText += getEncodedTextForCharacter(node.right, ch, text + "1");
+		}
+		return encodedText;
+	}
+
+	public String getDecodedText(HuffmanNode rootNode, HuffmanNode node, String text) {
+		String decodedText = "";
+		if (node.left == null && node.right == null) {
+			char decodedChar = (Character) node.getObject();
+			decodedText = decodedChar + "";	
+			return decodedText;
+		} else {
+			while (decodeCharPointer < text.length()) {
+				char ch = text.charAt(decodeCharPointer++);
+				if (ch == '0') {
+					decodedText += getDecodedText(rootNode, node.left, text);
+					node = rootNode;
+				} else if (ch == '1') {
+					decodedText += getDecodedText(rootNode, node.right, text);
+					node = rootNode;
+				}
+			}
+		}
+		return decodedText;
+	}
+
 }
