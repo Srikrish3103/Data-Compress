@@ -1,13 +1,5 @@
 package com.krish.bitConverter;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 public class BitEncoder
 {
     byte[] bits;
@@ -46,7 +38,7 @@ public class BitEncoder
     		}
     		bits[i]=tempBits;
     	}
-    	currentPosition=pos-1;
+    	currentPosition=pos;
     }
     public byte[] getBitFormat()
     {
