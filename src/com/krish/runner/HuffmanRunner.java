@@ -1,10 +1,13 @@
 package com.krish.runner;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,24 +44,19 @@ public class HuffmanRunner {
 	}
 
 	public static void main(String[] args) throws Exception {
-		  String text =
-		  "To decode the encoded data we require the Huffman tree. We iterate through the binary encoded data. To find character corresponding to current bits, we use following simple steps.\n"
-		  + "\n" + "    We start from root and do following until a leaf is found.\n" +
-		  "    If current bit is 0, we move to left node of the tree.\n" +
-		  "    If the bit is 1, we move to right node of the tree.\n" +
-		  "    If during traversal, we encounter a leaf node, we print character of that particular leaf node and then again continue the iteration of the encoded data starting from step 1.\n"
-		  + "\n" +
-		  "The below code takes a string as input, it encodes it and save in a variable encodedString. Then it decodes it and print the original string.\n"
-		  + "\n" +
-		  "The below code performs full Huffman Encoding and Decoding of a given input data."
-		  ;
-		FileOutputStream foutText=new FileOutputStream("C:/Test/Sample1.txt");
-		ByteArrayOutputStream boutText=new ByteArrayOutputStream();
-		boutText.write(text.getBytes());
-		boutText.writeTo(foutText);
-		boutText.flush();
-		boutText.close();
-		foutText.close();
+		String text="";
+		/*
+		 * FileOutputStream foutText=new FileOutputStream("C:/Test/Sample1.txt");
+		 * ByteArrayOutputStream boutText=new ByteArrayOutputStream();
+		 * boutText.write(text.getBytes()); boutText.writeTo(foutText);
+		 * boutText.flush(); boutText.close(); foutText.close();
+		 */
+		String str="";
+		BufferedReader buff=new BufferedReader(new FileReader("C:/Test/Sample1.txt"));
+		while((str=buff.readLine())!=null)
+		{
+			text+=str;
+		}
 		
 		//Getting unique object and their count from string
 		HuffmanRunner runner = new HuffmanRunner();
