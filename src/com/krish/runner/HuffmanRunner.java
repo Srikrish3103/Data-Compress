@@ -57,7 +57,6 @@ public class HuffmanRunner {
 		HashMap<Object, Integer> objectOccurrenceCount = new HashMap<Object, Integer>();
 		for (int i = 0; i < uniqueObject.size(); i++) {
 			objectOccurrenceCount.put(uniqueObject.get(i), runner.findObjectCount(uniqueObject.get(i), text));
-			System.out.println(runner.findObjectCount(uniqueObject.get(i), text));
 		}
 
 		HuffmanTree huffmanTree = new HuffmanTree();
@@ -71,7 +70,25 @@ public class HuffmanRunner {
 		}
 		System.out.println("EncodedText "+encodedText);
 		
-		bout.write(text.getBytes());
+		//Encoding into bits and writing to a file
+		byte b=0x00;
+		byte buffer=0x00;
+		int pos=0;
+		for(int i=0;i<encodedText.length();i++)
+		{
+			if(encodedText.charAt(i)=='0')
+				b=(byte)(buffer<<1);
+			else if(encodedText.charAt(i)=='1')
+				b=(byte)(buffer<<1);
+			pos++;
+			if(pos==8)
+			{
+				pos=0;
+				b=0x00;
+			}
+		}
+		
+		//bout.write();
 		fout=new FileOutputStream("C:/Test/Sample2.txt");
 		bout.writeTo(fout);
 
